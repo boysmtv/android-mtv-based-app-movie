@@ -1,6 +1,8 @@
 package com.mtv.app.movie.feature.login
 
 import com.mtv.app.core.provider.based.BaseViewModel
+import com.mtv.app.movie.data.model.PredictionData
+import com.mtv.app.movie.domain.usecase.GetPopularMoviesUseCase
 import com.mtv.app.movie.feature.login.model.LoginRequest
 import com.mtv.app.movie.feature.login.model.LoginResponse
 import com.mtv.based.core.network.utils.Resource
@@ -10,14 +12,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val getNamePrediction: GetPopularMoviesUseCase
 ) : BaseViewModel() {
 
     val loginState = MutableStateFlow<Resource<LoginResponse>>(Resource.Loading)
+    val prediction = MutableStateFlow<Resource<PredictionData>>(Resource.Loading)
 
     fun doLogin(loginRequest: LoginRequest) {
         launchUseCase(loginState) {
             loginUseCase(loginRequest)
+        }
+    }
+
+    fun load() {
+        launchUseCase(prediction) {
+            getNamePrediction(Unit)
         }
     }
 

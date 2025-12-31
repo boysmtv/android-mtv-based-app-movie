@@ -2,7 +2,15 @@ package com.mtv.app.movie.feature.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
@@ -28,6 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mtv.app.movie.feature.login.model.LoginRequest
 import com.mtv.based.core.network.utils.Resource
 import com.mtv.based.uicomponent.core.component.dialog.dialogv1.DialogCenterV1
@@ -35,12 +44,14 @@ import com.mtv.based.uicomponent.core.component.loading.LoadingV2
 
 @Composable
 fun LoginScreen(
+    navController: NavController,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val username = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
     val loginState by viewModel.loginState.collectAsState()
+    val predictionState by viewModel.prediction.collectAsState()
 
     val baseUiState by viewModel.baseUiState.collectAsState()
 
@@ -70,6 +81,15 @@ fun LoginScreen(
                         "Success - ${data.data.firstName}",
                         Toast.LENGTH_LONG
                     )
+
+                }
+
+                else -> {}
+            }
+
+            when (val data = predictionState) {
+                is Resource.Success -> {
+                    navController.navigate("home")
                 }
 
                 else -> {}
@@ -146,12 +166,13 @@ fun LoginScreen(
             // Login Button
             Button(
                 onClick = {
-                    viewModel.doLogin(
-                        loginRequest = LoginRequest(
-                            username = "boys",
-                            password = "mtv"
-                        )
-                    )
+//                    viewModel.doLogin(
+//                        loginRequest = LoginRequest(
+//                            username = "boys",
+//                            password = "mtv"
+//                        )
+//                    )
+                    viewModel.load()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

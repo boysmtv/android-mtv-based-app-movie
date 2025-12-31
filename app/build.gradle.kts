@@ -22,11 +22,17 @@ android {
 
     buildTypes {
         release {
+            buildConfigField("String", "BASE_URL", "\"https://api.prod.com/api/\"")
+            buildConfigField("Boolean", "USE_KTOR", "true")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            buildConfigField("String", "BASE_URL", "\"http://192.168.0.50:8080/api/\"")
+            buildConfigField("Boolean", "USE_KTOR", "false")
         }
     }
 
@@ -40,9 +46,11 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
         viewBinding = true
     }
+
 }
 dependencies {
     implementation(project(":data"))
@@ -95,6 +103,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.navigation.compose)
 
     // Testing
     testImplementation(libs.junit)
