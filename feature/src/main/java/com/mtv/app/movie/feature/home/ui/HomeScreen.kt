@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.mtv.app.movie.data.model.CountryProbability
 import com.mtv.app.movie.data.model.PredictionData
 import com.mtv.based.core.network.utils.Resource
@@ -31,6 +32,7 @@ import com.mtv.based.uicomponent.core.component.loading.LoadingV2
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val predictionState by viewModel.prediction.collectAsState()
